@@ -1,29 +1,36 @@
 library(shiny)
-library(ggplot2)
 
-dataset <- diamonds
-
-fluidPage(
-    
-    titlePanel("Diamonds Explorer"),
+shinyUI(pageWithSidebar(
+    headerPanel("My shiny data product"),
     
     sidebarPanel(
         
-        sliderInput('sampleSize', 'Sample Size', min=1, max=nrow(dataset),
-                    value=min(1000, nrow(dataset)), step=500, round=0),
+        h4('Set your weigth and height'),
         
-        selectInput('x', 'X', names(dataset)),
-        selectInput('y', 'Y', names(dataset), names(dataset)[[2]]),
-        selectInput('color', 'Color', c('None', names(dataset))),
+        sliderInput('Weigth', 'Input weigth (kilograms)', min = 40, max = 200,
+                    value = 40, step = 1, round = 0),
+
+        sliderInput('Height', 'Input height (centimeters)', min = 100, max = 250,
+                    value = 100, step = 1, round = 0)
         
-        checkboxInput('jitter', 'Jitter'),
-        checkboxInput('smooth', 'Smooth'),
-        
-        selectInput('facet_row', 'Facet Row', c(None='.', names(dataset))),
-        selectInput('facet_col', 'Facet Column', c(None='.', names(dataset)))
     ),
-    
+
     mainPanel(
-        plotOutput('plot')
+        h3('Your BMI calculation'),
+        p('Your weigth is'),
+        verbatimTextOutput("input_weigth"),
+        
+        p('Your height is'),
+        verbatimTextOutput('input_height'),
+        
+        p('Your BMI is'),
+        verbatimTextOutput('BMI_calculation'),
+        
+        p('BMI Categories: '),
+        p('Underweight = < 18.5'),
+        p('Normal weight = 18.5-24.9 '),
+        p('Overweight = 25-29.9'), 
+        p('Obesity = BMI of 30 or greater')
+        
     )
-)
+))
